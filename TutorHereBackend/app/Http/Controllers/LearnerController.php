@@ -16,6 +16,26 @@ class LearnerController extends Controller
     public function index()
     {
         //
+        return Learner::all();
+    }
+
+    public function locations($id)
+    {
+        $subs = DB::select('
+            SELECT
+                learnerlocation.idLearnerLocation,
+                learnerlocation.Learner_idLearner,
+                learnerlocation.address,
+                learnerlocation.tag,
+                learnerlocation.district,
+                learnerlocation.lat,
+                learnerlocation.lng
+            FROM
+                learnerlocation
+            WHERE
+                learnerlocation.Learner_idLearner =' . $id
+        );
+        return $subs;
     }
 
     /**
@@ -37,6 +57,7 @@ class LearnerController extends Controller
     public function store(Request $request)
     {
         //
+        return Learner::create($request->all());
     }
 
     /**
@@ -45,9 +66,10 @@ class LearnerController extends Controller
      * @param  \App\Models\Learner  $learner
      * @return \Illuminate\Http\Response
      */
-    public function show(Learner $learner)
+
+    public function show($id)
     {
-        //
+        return Learner::find($id);
     }
 
     /**
@@ -68,9 +90,12 @@ class LearnerController extends Controller
      * @param  \App\Models\Learner  $learner
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Learner $learner)
+    public function update(Request $request, $id)
     {
-        //
+        $item = Learner::findOrFail($id);
+        $item->update($request->all());
+
+        return $item;
     }
 
     /**

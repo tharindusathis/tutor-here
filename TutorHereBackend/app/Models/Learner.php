@@ -11,7 +11,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Learner
- * 
+ *
  * @property int $idLearner
  * @property int $status
  * @property string $fname
@@ -21,7 +21,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $password
  * @property float $account_balance
  * @property string $currency_type
- * 
+ *
  * @property \Illuminate\Database\Eloquent\Collection $subjects
  * @property \Illuminate\Database\Eloquent\Collection $learnerlocations
  * @property \Illuminate\Database\Eloquent\Collection $requests
@@ -40,7 +40,7 @@ class Learner extends Eloquent
 	];
 
 	protected $hidden = [
-		'password'
+		//'password'
 	];
 
 	protected $fillable = [

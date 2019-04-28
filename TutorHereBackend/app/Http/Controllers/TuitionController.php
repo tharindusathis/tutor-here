@@ -15,6 +15,7 @@ class TuitionController extends Controller
     public function index()
     {
         //
+        return Tuition::all();
     }
 
     /**
@@ -36,6 +37,7 @@ class TuitionController extends Controller
     public function store(Request $request)
     {
         //
+        return Tuition::create($request->all());
     }
 
     /**
@@ -44,9 +46,9 @@ class TuitionController extends Controller
      * @param  \App\Models\Tuition  $tuition
      * @return \Illuminate\Http\Response
      */
-    public function show(Tuition $tuition)
+    public function show($id)
     {
-        //
+        return Tuition::find($id);
     }
 
     /**

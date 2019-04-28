@@ -16,6 +16,7 @@ class PaymentController extends Controller
     public function index()
     {
         //
+        return Payment::all();
     }
 
     /**
@@ -37,6 +38,7 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         //
+        return Payment::create($request->all());
     }
 
     /**
@@ -45,9 +47,9 @@ class PaymentController extends Controller
      * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function show(Payment $payment)
+    public function show($id)
     {
-        //
+        return Payment::find($id);
     }
 
     /**

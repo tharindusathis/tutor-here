@@ -16,6 +16,7 @@ class QualificationController extends Controller
     public function index()
     {
         //
+        return Qualification::all();
     }
 
     /**
@@ -37,6 +38,7 @@ class QualificationController extends Controller
     public function store(Request $request)
     {
         //
+        return Qualification::create($request->all());
     }
 
     /**
@@ -45,9 +47,9 @@ class QualificationController extends Controller
      * @param  \App\Models\Qualification  $qualification
      * @return \Illuminate\Http\Response
      */
-    public function show(Qualification $qualification)
+    public function show($id)
     {
-        //
+        return Qualification::find($id);
     }
 
     /**

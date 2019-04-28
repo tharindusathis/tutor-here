@@ -15,6 +15,7 @@ class TutorlocationController extends Controller
     public function index()
     {
         //
+        return Tutorlocation::all();
     }
 
     /**
@@ -36,6 +37,7 @@ class TutorlocationController extends Controller
     public function store(Request $request)
     {
         //
+        return Tutorlocation::create($request->all());
     }
 
     /**
@@ -44,9 +46,9 @@ class TutorlocationController extends Controller
      * @param  \App\Models\Tutorlocation  $tutorlocation
      * @return \Illuminate\Http\Response
      */
-    public function show(Tutorlocation $tutorlocation)
+    public function show($id)
     {
-        //
+        return Tutorlocation::find($id);
     }
 
     /**

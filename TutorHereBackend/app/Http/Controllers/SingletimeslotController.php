@@ -15,6 +15,7 @@ class SingletimeslotController extends Controller
     public function index()
     {
         //
+        return Singletimeslot::all();
     }
 
     /**
@@ -36,6 +37,7 @@ class SingletimeslotController extends Controller
     public function store(Request $request)
     {
         //
+        return Singletimeslot::create($request->all());
     }
 
     /**
@@ -44,9 +46,9 @@ class SingletimeslotController extends Controller
      * @param  \App\Models\Singletimeslot  $singletimeslot
      * @return \Illuminate\Http\Response
      */
-    public function show(Singletimeslot $singletimeslot)
+    public function show($id)
     {
-        //
+        return Singletimeslot::find($id);
     }
 
     /**

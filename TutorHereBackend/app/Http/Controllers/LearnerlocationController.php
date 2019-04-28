@@ -16,6 +16,7 @@ class LearnerlocationController extends Controller
     public function index()
     {
         //
+        return Learnerlocation::all();
     }
 
     /**
@@ -37,6 +38,8 @@ class LearnerlocationController extends Controller
     public function store(Request $request)
     {
         //
+        return Learnerlocation::create($request->all());
+
     }
 
     /**
@@ -45,9 +48,9 @@ class LearnerlocationController extends Controller
      * @param  \App\Models\Learnerlocation  $learnerlocation
      * @return \Illuminate\Http\Response
      */
-    public function show(Learnerlocation $learnerlocation)
+    public function show($id)
     {
-        //
+        return Learnerlocation::find($id);
     }
 
     /**
@@ -79,8 +82,11 @@ class LearnerlocationController extends Controller
      * @param  \App\Models\Learnerlocation  $learnerlocation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Learnerlocation $learnerlocation)
+    public function delete(Request $request, $id)
     {
-        //
+        // $item = Learnerlocation::findOrFail($id);
+        // $item->delete();
+        DB::table('learnerlocation')->where('idLearnerLocation', '=', $id)->delete();
+        return 204;
     }
 }

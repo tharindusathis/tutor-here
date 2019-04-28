@@ -16,6 +16,7 @@ class RequestController extends Controller
     public function index()
     {
         //
+        return ARequest::all();
     }
 
     /**
@@ -37,6 +38,7 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         //
+        return ARequest::create($request->all());
     }
 
     /**
@@ -45,9 +47,9 @@ class RequestController extends Controller
      * @param  \App\Models\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(ARequest $arequest)
+    public function show($id)
     {
-        //
+        return ARequest::find($id);
     }
 
     /**

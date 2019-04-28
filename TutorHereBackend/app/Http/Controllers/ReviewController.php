@@ -15,6 +15,7 @@ class ReviewController extends Controller
     public function index()
     {
         //
+        return Review::all();
     }
 
     /**
@@ -36,6 +37,7 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //
+        return Review::create($request->all());
     }
 
     /**
@@ -44,9 +46,9 @@ class ReviewController extends Controller
      * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function show(Review $review)
+    public function show($id)
     {
-        //
+        return Review::find($id);
     }
 
     /**

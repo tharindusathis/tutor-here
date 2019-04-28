@@ -11,7 +11,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Learnerlocation
- * 
+ *
  * @property int $idLearnerLocation
  * @property int $Learner_idLearner
  * @property string $address
@@ -19,7 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $disstrict
  * @property float $lat
  * @property float $lng
- * 
+ *
  * @property \App\Models\Learner $learner
  * @property \Illuminate\Database\Eloquent\Collection $requests
  *
@@ -28,6 +28,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class Learnerlocation extends Eloquent
 {
 	protected $table = 'learnerlocation';
+	protected $primaryKey = 'idLearnerlocation';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -37,6 +38,7 @@ class Learnerlocation extends Eloquent
 	];
 
 	protected $fillable = [
+		'Learner_idLearner',
 		'address',
 		'city',
 		'disstrict',

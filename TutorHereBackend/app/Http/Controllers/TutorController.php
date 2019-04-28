@@ -15,7 +15,8 @@ class TutorController extends Controller
      */
     public function index()
     {
-        //
+
+        return Tutor::all();
     }
 
     /**
@@ -28,6 +29,23 @@ class TutorController extends Controller
         //
     }
 
+    public function subjects($id)
+    {
+        $subs = DB::select('
+            SELECT
+                `subject`.`name` AS subject_name,
+                `subject`.grade,
+                `subject`.syllabus_from,
+                tutor_has_subject.hourly_rate
+            FROM
+                `subject`
+                LEFT OUTER JOIN tutor_has_subject ON tutor_has_subject.Subject_idSubject = `subject`.idSubject
+            WHERE
+                tutor_has_subject.Tutor_idTutor =' . $id
+        );
+        return $subs;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -37,6 +55,7 @@ class TutorController extends Controller
     public function store(Request $request)
     {
         //
+        return Tutor::create($request->all());
     }
 
     /**
@@ -45,9 +64,9 @@ class TutorController extends Controller
      * @param  \App\Models\Tutor  $tutor
      * @return \Illuminate\Http\Response
      */
-    public function show(Tutor $tutor)
+    public function show($id)
     {
-        //
+        return Tutor::find($id);
     }
 
     /**

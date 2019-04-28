@@ -15,6 +15,7 @@ class WeeklytimeslotController extends Controller
     public function index()
     {
         //
+        return Weeklytimeslot::all();
     }
 
     /**
@@ -36,6 +37,7 @@ class WeeklytimeslotController extends Controller
     public function store(Request $request)
     {
         //
+        return Weeklytimeslot::create($request->all());
     }
 
     /**
@@ -44,9 +46,9 @@ class WeeklytimeslotController extends Controller
      * @param  \App\Models\Weeklytimeslot  $weeklytimeslot
      * @return \Illuminate\Http\Response
      */
-    public function show(Weeklytimeslot $weeklytimeslot)
+    public function show($id)
     {
-        //
+        return Weeklytimeslot::find($id);
     }
 
     /**
