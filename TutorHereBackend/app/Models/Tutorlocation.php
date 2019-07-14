@@ -11,13 +11,13 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Tutorlocation
- * 
+ *
  * @property int $idTutorLocation
  * @property int $Tutor_idTutor
  * @property string $city
  * @property float $lat
  * @property float $lng
- * 
+ *
  * @property \App\Models\Tutor $tutor
  *
  * @package App\Models
@@ -34,6 +34,7 @@ class Tutorlocation extends Eloquent
 	];
 
 	protected $fillable = [
+		'Tutor_idTutor',
 		'city',
 		'lat',
 		'lng'

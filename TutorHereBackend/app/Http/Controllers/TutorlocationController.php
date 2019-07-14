@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tutorlocation;
 use Illuminate\Http\Request;
+use DB;
 
 class TutorlocationController extends Controller
 {
@@ -83,5 +84,11 @@ class TutorlocationController extends Controller
     public function destroy(Tutorlocation $tutorlocation)
     {
         //
+    }
+
+    public function delete(Request $request, $id)
+    {
+        DB::table('tutorlocation')->where('idTutorLocation', '=', $id)->delete();
+        return 204;
     }
 }

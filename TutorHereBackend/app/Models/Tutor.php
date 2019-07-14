@@ -7,11 +7,14 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class Tutor
- * 
+ *
  * @property int $idTutor
  * @property int $status
  * @property string $fname
@@ -21,7 +24,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $password
  * @property float $account_balance
  * @property string $currency_type
- * 
+ *
  * @property \Illuminate\Database\Eloquent\Collection $qualifications
  * @property \Illuminate\Database\Eloquent\Collection $singletimeslots
  * @property \Illuminate\Database\Eloquent\Collection $subjects
@@ -32,17 +35,20 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class Tutor extends Eloquent
 {
+    use HasApiTokens, Notifiable;
+
 	protected $table = 'tutor';
 	protected $primaryKey = 'idTutor';
-	public $timestamps = false;
+	public $timestamps = true;
 
 	protected $casts = [
 		'status' => 'int',
-		'account_balance' => 'float'
+		'account_balance' => 'float',
+        'email_verified_at' => 'datetime',
 	];
 
 	protected $hidden = [
-		'password'
+        'password', 'remember_token',
 	];
 
 	protected $fillable = [

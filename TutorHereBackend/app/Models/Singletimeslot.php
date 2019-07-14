@@ -11,12 +11,12 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Singletimeslot
- * 
+ *
  * @property int $idSingleTimeslot
  * @property int $Tutor_idTutor
  * @property \Carbon\Carbon $start_datetime
  * @property \Carbon\Carbon $end_datetime
- * 
+ *
  * @property \App\Models\Tutor $tutor
  *
  * @package App\Models
@@ -37,7 +37,8 @@ class Singletimeslot extends Eloquent
 
 	protected $fillable = [
 		'start_datetime',
-		'end_datetime'
+		'end_datetime',
+		'Tutor_idTutor'
 	];
 
 	public function tutor()

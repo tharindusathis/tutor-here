@@ -6,8 +6,17 @@ use App\Models\Request as ARequest;
 use Illuminate\Http\Request;
 use DB;
 
+define ('STATUS_REQUEST_PENDING', 0);
+define ('STATUS_REQUEST_ACCEPTED', 1);
+define ('STATUS_REQUEST_DECLINED', 2);
+define ('STATUS_REQUEST_FINISHED', 3);
+
+
+
 class RequestController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -36,6 +45,12 @@ class RequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+    {
+        $request['status'] = STATUS_REQUEST_DECLINED;
+        return ARequest::create($request->all());
+    }
+
+    public function calculateFare(Request $request)
     {
         //
         return ARequest::create($request->all());

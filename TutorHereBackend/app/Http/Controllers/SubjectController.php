@@ -73,6 +73,48 @@ class SubjectController extends Controller
         }
     }
 
+    public function findSubjects()
+    {
+        $subs = DB::select('
+            SELECT
+                `subject`.`name`,
+                Count(`subject`.idSubject) AS subject_count
+            FROM
+                `subject`
+            GROUP BY
+                `subject`.`name`
+            ORDER BY
+                subject_count DESC
+        ');
+        return $subs;
+    }
+    public function findGrades(Request $request)
+    {
+        $grades = DB::select(
+            "
+            SELECT
+                `subject`.idSubject,
+                `subject`.grade,
+                `subject`.`name`,
+                `subject`.syllabus_from,
+                CONCAT( SUBJECT.grade, \", \", SUBJECT.syllabus_from ) AS grade_name,
+                COUNT( tutor_has_subject.Tutor_idTutor ) AS tutor_count
+            FROM
+                `subject`
+                LEFT OUTER JOIN tutor_has_subject ON tutor_has_subject.Subject_idSubject = `subject`.idSubject
+            WHERE
+                `subject`.`name` LIKE :subject_name
+            GROUP BY
+                grade,syllabus_from,`name`
+            ORDER BY
+                tutor_count DESC
+            ",
+            [ 'subject_name' => '%' . $request->subject_name . '%']
+        );
+        return $grades;
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -105,6 +147,11 @@ class SubjectController extends Controller
     public function update(Request $request, Subject $subject)
     {
         //
+    }
+
+    public function mail()
+    {
+
     }
 
     /**

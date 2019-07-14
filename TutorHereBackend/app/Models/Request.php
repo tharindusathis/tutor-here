@@ -11,7 +11,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Request
- * 
+ *
  * @property int $idRequest
  * @property int $status
  * @property int $Tutor_has_Subject_Tutor_idTutor
@@ -22,7 +22,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Carbon\Carbon $datetime
  * @property int $duration
  * @property \Carbon\Carbon $created_at
- * 
+ *
  * @property \App\Models\Learner $learner
  * @property \App\Models\Learnerlocation $learnerlocation
  * @property \App\Models\TutorHasSubject $tutor_has_subject
@@ -33,7 +33,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class Request extends Eloquent
 {
 	protected $table = 'request';
-	public $timestamps = false;
+	public $timestamps = true;
 
 	protected $casts = [
 		'status' => 'int',
@@ -46,14 +46,21 @@ class Request extends Eloquent
 	];
 
 	protected $dates = [
-		'datetime'
+		'date'
 	];
 
 	protected $fillable = [
 		'status',
 		'payment',
-		'datetime',
-		'duration'
+		'date',
+		'duration',
+		'start_time',
+		'end_time',
+		'idTimeslot',
+		'Tutor_has_Subject_Tutor_idTutor',
+		'Tutor_has_Subject_Subject_idSubject',
+		'Learner_idLearner',
+		'LearnerLocation_idLearnerLocation'
 	];
 
 	public function learner()

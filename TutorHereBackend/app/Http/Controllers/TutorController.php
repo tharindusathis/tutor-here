@@ -29,6 +29,170 @@ class TutorController extends Controller
         //
     }
 
+  public function findTutors(Request $request)
+    {
+        $subject_name = '%' . $request->subject_name . '%';
+        //$subject_name = $request->subject_name ;
+        $date = $request->date;
+        //$grade = $request->grade;
+        //$syllabus_from = $request->syllabus_from;
+        //$no_grade = $request->no_grade;
+
+        //filer Subject + Date
+
+        $tutors = null;
+        $tutor_ids = null;
+        $tutors = DB::select("
+            SELECT DISTINCT
+                tutor.idTutor, CONCAT(tutor.fname,\" \",tutor.lname) AS tutor_name, timeslots.start_time, timeslots.end_time, hourly_rate, rating
+            FROM
+                tutor
+                INNER JOIN
+                    ( SELECT  Tutor_idTutor,
+                        CAST(start_datetime AS TIME ) as start_time,
+                        CAST(end_datetime AS TIME ) as end_time
+                        FROM singletimeslot WHERE CAST( start_datetime AS DATE ) = ?
+                    UNION SELECT Tutor_idTutor,
+                        CAST(start_time AS TIME )  as start_time ,
+                        CAST(end_time AS TIME )  as end_time
+                        FROM weeklytimeslot WHERE week_day = DAYOFWEEK( ? ) )
+                AS timeslots ON timeslots.Tutor_idTutor = tutor.idTutor
+                INNER JOIN
+                (
+                    SELECT * FROM tutor_has_subject WHERE tutor_has_subject.Subject_idSubject IN
+                    (	SELECT idSubject FROM `subject`
+                        WHERE UPPER(`name`) LIKE ?
+                    )
+                ) As t_s ON t_s.Tutor_idTutor = tutor.idTutor 	ORDER BY
+		    tutor.idTutor",
+            [
+                $date,
+                $date,
+                $subject_name
+            ]
+        );
+
+        $tutor_ids = collect($tutors)->pluck('idTutor')->unique();
+
+        $tutor_subjects = DB::select("
+            SELECT
+            `subject`.idSubject,
+            tutor.idTutor,
+            `subject`.`name`,
+            `subject`.grade,
+            `subject`.syllabus_from,
+            hourly_rate
+            FROM
+            tutor_has_subject
+            INNER JOIN tutor ON tutor_has_subject.Tutor_idTutor = tutor.idTutor
+            INNER JOIN `subject` ON tutor_has_subject.Subject_idSubject = `subject`.idSubject");
+
+        $tutor_subjects = collect($tutor_subjects)->whereIn('idTutor', $tutor_ids);
+
+        $tutor_locations = DB::select("
+            SELECT
+            tutorlocation.idTutorLocation,
+            tutorlocation.Tutor_idTutor AS idTutor,
+            tutorlocation.city,
+            tutorlocation.lat,
+            tutorlocation.lng
+            FROM
+            tutorlocation
+        ");
+
+        $tutor_locations = collect($tutor_locations)->whereIn('idTutor', $tutor_ids);
+
+        return response()->json(['timeslots' => $tutors, 'subjects' => $tutor_subjects, 'locations' => $tutor_locations, 'ids' => $tutor_ids   ]);
+
+
+    }
+
+    public function findTutorsWithGrade(Request $request)
+    {
+        //$subject_name = '%' . $request->subject_name . '%';
+        $subject_name = $request->subject_name ;
+        $date = $request->date;
+        $grade = $request->grade;
+        $syllabus_from = $request->syllabus_from;
+        //$no_grade = $request->no_grade;
+
+        //filer Subject + Date
+
+        $tutors = null;
+        $tutor_ids = null;
+        $tutors = DB::select("
+            SELECT DISTINCT
+                tutor.idTutor, CONCAT(tutor.fname,\" \",tutor.lname) AS tutor_name,   timeslots.start_time, timeslots.end_time, hourly_rate, rating
+            FROM
+                tutor
+                INNER JOIN
+                    ( SELECT Tutor_idTutor,
+                        CAST(start_datetime AS TIME ) as start_time,
+                        CAST(end_datetime AS TIME ) as end_time
+                        FROM singletimeslot WHERE CAST( start_datetime AS DATE ) = ?
+                    UNION SELECT Tutor_idTutor,
+                        CAST(start_time AS TIME )  as start_time ,
+                        CAST(end_time AS TIME )  as end_time
+                        FROM weeklytimeslot WHERE week_day = DAYOFWEEK( ? ) )
+                AS timeslots ON timeslots.Tutor_idTutor = tutor.idTutor
+                INNER JOIN
+                (
+                    SELECT * FROM tutor_has_subject WHERE tutor_has_subject.Subject_idSubject IN
+                    (	SELECT idSubject FROM `subject`
+                        WHERE UPPER(`name`) = UPPER( ? )
+                        AND UPPER(`grade`) = UPPER( ? )
+                        AND UPPER(`syllabus_from`) = UPPER( ? )
+                    )
+                ) As t_s ON t_s.Tutor_idTutor = tutor.idTutor 	ORDER BY
+		    tutor.idTutor",
+            [
+                $date,
+                $date,
+                $subject_name,
+                $grade,
+                $syllabus_from
+            ]
+        );
+
+
+       $tutor_ids = collect($tutors)->pluck('idTutor')->unique();
+
+        $tutor_subjects = DB::select("
+            SELECT
+            `subject`.idSubject,
+            tutor.idTutor,
+            `subject`.`name`,
+            `subject`.grade,
+            `subject`.syllabus_from,
+            hourly_rate
+            FROM
+            tutor_has_subject
+            INNER JOIN tutor ON tutor_has_subject.Tutor_idTutor = tutor.idTutor
+            INNER JOIN `subject` ON tutor_has_subject.Subject_idSubject = `subject`.idSubject");
+
+
+
+        $tutor_subjects = collect($tutor_subjects)->whereIn('idTutor', $tutor_ids);
+
+
+        $tutor_locations = DB::select("
+            SELECT
+            tutorlocation.idTutorLocation,
+            tutorlocation.Tutor_idTutor AS idTutor,
+            tutorlocation.city,
+            tutorlocation.lat,
+            tutorlocation.lng
+            FROM
+            tutorlocation
+        ");
+
+        $tutor_locations = collect($tutor_locations)->whereIn('idTutor', $tutor_ids);
+
+        return response()->json(['timeslots' => $tutors, 'subjects' => $tutor_subjects, 'locations' => $tutor_locations, 'ids' => $tutor_ids   ]);
+
+    }
+
+
     public function subjects($id)
     {
         $subs = DB::select('
@@ -61,7 +225,7 @@ class TutorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Tutor  $tutor
+     * @param  \App\Models\Tutor $tutor
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -87,9 +251,12 @@ class TutorController extends Controller
      * @param  \App\Models\Tutor  $tutor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tutor $tutor)
+    public function update(Request $request, $id)
     {
-        //
+        $item = Tutor::findOrFail($id);
+        $item->update($request->all());
+
+        return $item;
     }
 
     /**
@@ -102,4 +269,44 @@ class TutorController extends Controller
     {
         //
     }
+
+
+    public function locations($id)
+    {
+        $items = DB::select('
+            SELECT
+                *
+            FROM
+                tutorlocation
+            WHERE
+                tutorlocation.Tutor_idTutor =' . $id
+        );
+        return $items;
+    }
+
+    public function singletimeslots($id)
+    {
+        $items = DB::select('
+            SELECT
+                *
+            FROM
+                singletimeslot
+            WHERE
+                singletimeslot.Tutor_idTutor =' . $id
+        );
+        return $items;
+    }
+    public function weeklytimeslots($id)
+    {
+        $items = DB::select('
+            SELECT
+                *
+            FROM
+                weeklytimeslot
+            WHERE
+                weeklytimeslot.Tutor_idTutor =' . $id
+        );
+        return $items;
+    }
+
 }

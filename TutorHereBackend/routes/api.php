@@ -84,9 +84,36 @@ Route::get('subjects_dist',
 			'SubjectController@distinct');
 
 Route::get('tutors/{id}/subjects',			'TutorController@subjects');
+Route::get('tutors/{id}/locations',			'TutorController@locations');
+Route::get('tutors/{id}/singletimeslots',			'TutorController@singletimeslots');
+Route::get('tutors/{id}/weeklytimeslots',			'TutorController@weeklytimeslots');
 Route::get('learners/{id}/locations',			'LearnerController@locations');
 
+Route::post('tutors/search', 'TutorController@findTutorsWithGrade');
+Route::post('subjects/search/grades', 'SubjectController@findGrades');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::get('subjects/search/subjects', 'SubjectController@findSubjects');
+Route::get('mail', 'SubjectController@mail');
+
+
+
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::group([
+    'prefix' => 'auth'
+], function () {
+    Route::post('login', 'AuthController@login');
+    Route::post('signup', 'AuthController@signup');
+
+    Route::get('signup/activate/{token}', 'AuthController@signupActivate');
+
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function() {
+        Route::get('logout', 'AuthController@logout');
+        Route::get('user', 'AuthController@user');
+    });
 });

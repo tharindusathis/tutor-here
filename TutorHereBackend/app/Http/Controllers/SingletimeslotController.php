@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Singletimeslot;
 use Illuminate\Http\Request;
+use DB;
 
 class SingletimeslotController extends Controller
 {
@@ -37,6 +38,17 @@ class SingletimeslotController extends Controller
     public function store(Request $request)
     {
         //
+        // $start = $request->start_date;
+        // $start = str_replace("-",":",$start);
+        // $start = $start . " " .  $request->start_time . ":00";
+
+        // $end = $request->end_date;
+        // $end = str_replace("-",":",$end);
+        // $end = $end . " " .  $request->end_time . ":00";
+
+        // $request->merge(['start_datetime' => $start]);
+        // $request->merge(['end_datetime' => $end]);
+
         return Singletimeslot::create($request->all());
     }
 
@@ -83,5 +95,11 @@ class SingletimeslotController extends Controller
     public function destroy(Singletimeslot $singletimeslot)
     {
         //
+    }
+
+       public function delete(Request $request, $id)
+    {
+        DB::table('singletimeslot')->where('idSingleTimeslot', '=', $id)->delete();
+        return 204;
     }
 }

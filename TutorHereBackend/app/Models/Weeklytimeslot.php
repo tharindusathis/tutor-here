@@ -11,13 +11,13 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Weeklytimeslot
- * 
+ *
  * @property int $idWeeklyTimeslot
  * @property int $Tutor_idTutor
  * @property int $week_day
  * @property \Carbon\Carbon $start_time
  * @property \Carbon\Carbon $end_time
- * 
+ *
  * @property \App\Models\Tutor $tutor
  *
  * @package App\Models
@@ -33,12 +33,12 @@ class Weeklytimeslot extends Eloquent
 	];
 
 	protected $dates = [
-		'start_time',
-		'end_time'
+
 	];
 
 	protected $fillable = [
 		'week_day',
+		'Tutor_idTutor',
 		'start_time',
 		'end_time'
 	];

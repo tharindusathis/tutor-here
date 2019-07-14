@@ -19,6 +19,7 @@ class LearnerController extends Controller
         return Learner::all();
     }
 
+
     public function locations($id)
     {
         $subs = DB::select('
