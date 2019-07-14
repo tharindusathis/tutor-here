@@ -1,45 +1,159 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <b-row>
+      <b-col>
+        <button @click="format">Format</button>
+        <pre>{{ api_data.search_results }}</pre>
+      </b-col>
+      <b-col>
+        <pre>{{ formatted }}</pre>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: "FindTutor",
   props: {
-    msg: String
+    idLearner: {
+      default: 1
+    }
+  },
+  components: {},
+  data() {
+    return {
+      tem: "ff",
+      api_data: {
+        subjects: [],
+        grades: [],
+        grades_array: [],
+        search_results: [],
+        location_options: []
+      },
+      form: {
+        subject: "Mathematics",
+        location: null,
+        lng: "",
+        lat: "",
+        date: "2019-1-1",
+        grade_raw: "",
+        grade: "",
+        grade_id: null
+      },
+      formatted: "dd  ",
+      states: {
+        subject: null,
+        location: null,
+        lng: null,
+        lat: null,
+        date: null,
+        grade: null
+      },
+      visibility: {
+        grade: false,
+        date_loc: false
+      }
+    };
+  },
+  created() {
+    this.getTutors();
+  },
+
+  methods: {
+    format() {
+      console.log("formatiing");
+      let output = {};
+      let data = this.api_data.search_results;
+      let ids = data.ids;
+
+      for (const [key, value] of Object.entries(ids)) {
+        //console.log(key, value);
+        let id = value;
+        let all = {};
+        let timeslots = [];
+        let locations = [];
+        let subjects = [];
+
+        for (const t of data.timeslots) {
+          if (t.idTutor == id) {
+            all["id"] = id;
+            all["name"] = t.tutor_name;
+            all["rating"] = t.rating;
+            let timeslot = {};
+            timeslot["start_time"] = t.start_time;
+            timeslot["end_time"] = t.end_time;
+
+            timeslots.push(timeslot);
+          }
+        }
+        timeslots = timeslots.reduce((unique, o) => {
+          if (
+            !unique.some(
+              obj =>
+                obj.start_time === o.start_time && obj.end_time === o.end_time
+            )
+          ) {
+            unique.push(o);
+          }
+          return unique;
+        }, []);
+
+        for (const [key, value] of Object.entries(data.subjects)) {
+          if (value.idTutor == id) {
+            let subject = {};
+            subject["id"] = value.idSubject;
+            subject["name"] = value.name;
+            subject["syllabus"] = value.syllabus_from;
+            subject["grade"] = value.grade;
+            subject["hourly_rate"] = value.hourly_rate;
+            subjects.push(subject);
+          }
+        }
+
+        for (const t of data.locations) {
+          if (t.idTutor == id) {
+            let location = {};
+            location["id"] = t.idTutorLocation;
+
+            location["lat"] = t.lat;
+            location["lng"] = t.lng;
+            locations.push(location);
+          }
+        }
+
+        all["timeslots"] = timeslots;
+        all["locations"] = locations;
+        all["subjects"] = subjects;
+        output[id] = all;
+      }
+      this.formatted = output;
+    },
+    getTutors() {
+      let grd = "";
+      let syl = "";
+      if (this.form.grade) {
+        grd = this.form.grade.grade;
+        syl = this.form.grade.syllabus_from;
+      }
+      let req = {
+        subject_name: this.form.subject,
+        grade: grd,
+        syllabus_from: syl,
+        date: this.form.date
+      };
+      this.$http.post("tutors/search", req).then(response => {
+        console.log(response.data);
+        this.api_data.search_results = response.data;
+      });
+    }
   }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
+
 <style scoped>
 h3 {
   margin: 40px 0 0;

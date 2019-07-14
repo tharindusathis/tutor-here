@@ -18,7 +18,7 @@
                 </b-form-input>
 
                 <datalist v-if="form.name.length >= 2" id="my-list-subjects_names" >
-                  <option v-for="item in subjects_names">{{ item }}</option>
+                  <option v-for="item in subjects_names" >{{ item }}</option>
                 </datalist>
 
                 <b-form-invalid-feedback id="input-1-live-feedback">
