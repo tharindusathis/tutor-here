@@ -1,6 +1,6 @@
 <template>
   <div>
-    <requests-table></requests-table>
+    <requests-table :idTutor="idTutor"></requests-table>
   </div>
 </template>
 
@@ -11,7 +11,16 @@
     name: "Home",
     components: {
       RequestsTable
+    },
+    data() {
+      return {
+        idTutor: 1
+      }
+    },
+    created() {
+      this.idTutor = this.$auth.getId()
     }
+    ,
   }
 </script>
 

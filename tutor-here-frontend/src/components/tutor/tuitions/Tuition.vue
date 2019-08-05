@@ -3,9 +3,6 @@
     <b-card
         no-body
 
-        :img-src="require('../../../assets/pc.jpg')"
-        img-alt="Image"
-        img-top
     >
       <h4 slot="header" align="center">Tuition Request</h4>
 
@@ -25,50 +22,79 @@
         <b-list-group-item>
           <b-row>
             <b-col sm="6">
-              <b-card align="center">{{ data.start_time }}</b-card>
+              <b-card align="center">
+                <h5>
+                  <b-badge variant="dark">{{ data.start_time }}</b-badge>
+                </h5>
+              </b-card>
             </b-col>
             <b-col sm="6">
-              <b-card align="center">{{ data.end_time }}</b-card>
+              <b-card align="center">
+                <h5>
+                  <b-badge variant="dark">{{ data.end_time }}</b-badge>
+                </h5>
+              </b-card>
             </b-col>
           </b-row>
         </b-list-group-item>
+      </b-list-group>
 
-        <b-list-group-item>{{ data.address }}</b-list-group-item>
 
-
-        <b-list-group-item v-if="(parseInt(data.status) === 0)" align="center" variant="warning">PENDING
-        </b-list-group-item>
-        <b-list-group-item v-if="(parseInt(data.status) === 1)" align="center" variant="success">REQUEST ACCEPTED
-        </b-list-group-item>
-        <b-list-group-item v-if="(parseInt(data.status) === 3)" align="center" variant="warning">TRAVELLING
-        </b-list-group-item>
-        <b-list-group-item v-if="(parseInt(data.status) === 2)" align="center" variant="warning">DECLINED
-        </b-list-group-item>
-        <b-list-group-item v-if="(parseInt(data.status) === 4)" align="center" variant="warning">STARTED
-        </b-list-group-item>
-        <b-list-group-item v-if="(parseInt(data.status) === 5)" align="center" variant="warning">FINISHED
-        </b-list-group-item>
-
+      <b-list-group flush>
         <b-list-group-item>
-          <b-button v-if="(parseInt(data.status) === 0)" variant="primary" block @click="accpetRequest()">ACCEPT
-            REQUEST
-          </b-button>
-          <b-button v-if="(parseInt(data.status) === 0)" variant="danger" block @click="declineRequest()">DECLINE
-            REQUEST
-          </b-button>
-          <b-button v-if="(parseInt(data.status) === 1)" variant="primary" block @click="comingRequest()">START TO GO
-          </b-button>
-          <b-button v-if="(parseInt(data.status) === 3)" variant="primary" block @click="startRequest()">START TUITION
-          </b-button>
-          <b-button v-if="(parseInt(data.status) === 4)" variant="primary" block @click="finishRequest()">COLLECT FEES
-          </b-button>
+          <b-row>
+            <b-col sm="6">
+              <b-card class="w-100" align="center" border-variant="primary"><h6>Fare: {{ data.payment }}</h6></b-card>
+            </b-col>
+            <b-col sm="6">
+              <b-card class="w-100" align="center" border-variant="primary"><h6> {{ data.dist }} KM</h6></b-card>
+            </b-col>
+          </b-row>
         </b-list-group-item>
       </b-list-group>
 
-      <b-card-body>
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
-      </b-card-body>
+
+      <b-list-group flush>
+        <b-list-group-item>
+          <b-row>
+            <b-col sm="12">
+              <a :href="this.getLocationLink()" target="_blank">
+                <b-card class="w-100" align="center" border-variant="primary"><h6> {{ data.address }}</h6></b-card>
+              </a>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+      </b-list-group>
+
+
+      <b-list-group-item v-if="(parseInt(data.status) === 0)" align="center" variant="warning">PENDING
+      </b-list-group-item>
+      <b-list-group-item v-if="(parseInt(data.status) === 1)" align="center" variant="success">REQUEST ACCEPTED
+      </b-list-group-item>
+      <b-list-group-item v-if="(parseInt(data.status) === 3)" align="center" variant="warning">TRAVELLING
+      </b-list-group-item>
+      <b-list-group-item v-if="(parseInt(data.status) === 2)" align="center" variant="warning">DECLINED
+      </b-list-group-item>
+      <b-list-group-item v-if="(parseInt(data.status) === 4)" align="center" variant="warning">STARTED
+      </b-list-group-item>
+      <b-list-group-item v-if="(parseInt(data.status) === 5)" align="center" variant="warning">FINISHED
+      </b-list-group-item>
+
+      <b-list-group-item>
+        <b-button v-if="(parseInt(data.status) === 0)" variant="primary" block @click="accpetRequest()">ACCEPT
+          REQUEST
+        </b-button>
+        <b-button v-if="(parseInt(data.status) === 0)" variant="danger" block @click="declineRequest()">DECLINE
+          REQUEST
+        </b-button>
+        <b-button v-if="(parseInt(data.status) === 1)" variant="primary" block @click="comingRequest()">START TO GO
+        </b-button>
+        <b-button v-if="(parseInt(data.status) === 3)" variant="primary" block @click="startRequest()">START TUITION
+        </b-button>
+        <b-button v-if="(parseInt(data.status) === 4)" variant="primary" block @click="finishRequest()">COLLECT FEES
+        </b-button>
+      </b-list-group-item>
+      </b-list-group>
 
 
     </b-card>
@@ -116,11 +142,18 @@
     ,
     methods: {
       getstatus() {
+        this.$loading(true);
         this.$http.get('request/' + this.idRequest)
           .then(response => {
             this.data = response.data[0];
             console.log(response.data);
-          });
+            this.$loading(false);
+          }).catch(error => {
+          this.$loading(false);
+          console.log("err");
+          console.log(error);
+          console.log(error.data);
+        });
       }
       ,
       accpetRequest() {
@@ -196,6 +229,10 @@
             console.log(error);
           });
       },
+      getLocationLink() {
+        let url = "https://www.google.com/maps/search/?api=1&query=" + this.data.lat + "," + this.data.lng;
+        return url;
+      }
     }
   }
 </script>

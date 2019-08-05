@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-col sm="12">
-      <b-card>
+      <b-card v-show="items.length > 0">
         <b-container fluid>
 
           <!-- User Interface controls -->
@@ -148,7 +148,9 @@
 
         </b-container>
       </b-card>
-
+      <b-card v-show="!isEmpty" class="align-items-center d-flex justify-content-center">
+        List is Empty
+      </b-card>
     </b-col>
   </b-row>
 </template>
@@ -167,6 +169,7 @@
     data() {
       return {
         items: items,
+        isEmpty: true,
         isBusy: false,
         fields: [
           {key: 'created_at', label: 'Requested On', sortable: true},
@@ -217,6 +220,7 @@
             console.log(response);
 
             const items = response.data;
+            if (items.length > 0) this.isEmpty = false;
             this.items = items;
             this.totalRows = items.length;
             this.isBusy = false;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card>
-      <h2>User Profile</h2>
+      <h5 align="left">User Profile</h5>
 
       <b-input-group :prepend="inputOptions.fname.label" class="mt-3">
         <b-form-input :state="valuesFNameState" v-model="values.fname"
@@ -110,61 +110,63 @@
         </b-form-invalid-feedback>
       </b-input-group>
 
-      <b-input-group :prepend="inputOptions.password.label" class="mt-3">
-        <b-form-input :state="valuesPasswordState" v-model="values.password"
-                      :disabled="inputOptions.password.disabled" trim maxlength="44"
-                      @input="$v.values.password.$touch()"></b-form-input>
-        <b-input-group-append>
-          <b-button v-if="!inputOptions.password.isEditing" variant="outline-info"
-                    @click="enterEditMode(inputOptions.password)">Edit
-          </b-button>
-          <b-button v-if="inputOptions.password.isEditing" variant="outline-success"
-                    @click=
-                        "exitEditMode(inputOptions.password);
-             api_data.password = values.password;
-             saveData();"
-                    :disabled="this.$v.values.password.$error">Save
-          </b-button>
-          <b-button v-if="inputOptions.password.isEditing" variant="outline-danger"
-                    @click="exitEditMode(inputOptions.password);
-             values.password = api_data.password;">X
-          </b-button>
-        </b-input-group-append>
+      <!--Password-->
+      <!--<b-input-group :prepend="inputOptions.password.label" class="mt-3">-->
+      <!--<b-form-input :state="valuesPasswordState" v-model="values.password"-->
+      <!--:disabled="inputOptions.password.disabled" trim maxlength="44"-->
+      <!--@input="$v.values.password.$touch()"></b-form-input>-->
+      <!--<b-input-group-append>-->
+      <!--<b-button v-if="!inputOptions.password.isEditing" variant="outline-info"-->
+      <!--@click="enterEditMode(inputOptions.password)">Edit-->
+      <!--</b-button>-->
+      <!--<b-button v-if="inputOptions.password.isEditing" variant="outline-success"-->
+      <!--@click=-->
+      <!--"exitEditMode(inputOptions.password);-->
+      <!--api_data.password = values.password;-->
+      <!--saveData();"-->
+      <!--:disabled="this.$v.values.password.$error">Save-->
+      <!--</b-button>-->
+      <!--<b-button v-if="inputOptions.password.isEditing" variant="outline-danger"-->
+      <!--@click="exitEditMode(inputOptions.password);-->
+      <!--values.password = api_data.password;">X-->
+      <!--</b-button>-->
+      <!--</b-input-group-append>-->
 
-        <b-form-invalid-feedback>
-          <div v-if="!$v.values.password.required">This field is required.</div>
-        </b-form-invalid-feedback>
-      </b-input-group>
+      <!--<b-form-invalid-feedback>-->
+      <!--<div v-if="!$v.values.password.required">This field is required.</div>-->
+      <!--</b-form-invalid-feedback>-->
+      <!--</b-input-group>-->
 
-      <b-input-group :prepend="inputOptions.currencyType.label" class="mt-3">
-        <b-form-input :state="valuesCurrencyTypeState" v-model="values.currencyType"
-                      :disabled="inputOptions.currencyType.disabled" trim maxlength="3"
-                      @input="$v.values.currencyType.$touch()"></b-form-input>
-        <b-input-group-append>
-          <b-button v-if="!inputOptions.currencyType.isEditing" variant="outline-info"
-                    @click="enterEditMode(inputOptions.currencyType)">Edit
-          </b-button>
-          <b-button v-if="inputOptions.currencyType.isEditing" variant="outline-success"
-                    @click=
-                        "exitEditMode(inputOptions.currencyType);
-             api_data.currency_type = values.currencyType;
-             saveData();"
-                    :disabled="this.$v.values.currencyType.$error">Save
-          </b-button>
-          <b-button v-if="inputOptions.currencyType.isEditing" variant="outline-danger"
-                    @click="exitEditMode(inputOptions.currencyType);
-             values.currencyType = api_data.currency_type;">X
-          </b-button>
-        </b-input-group-append>
+      <!--<b-input-group :prepend="inputOptions.currencyType.label" class="mt-3">-->
+      <!--<b-form-input :state="valuesCurrencyTypeState" v-model="values.currencyType"-->
+      <!--:disabled="inputOptions.currencyType.disabled" trim maxlength="3"-->
+      <!--@input="$v.values.currencyType.$touch()"></b-form-input>-->
+      <!--<b-input-group-append>-->
+      <!--<b-button v-if="!inputOptions.currencyType.isEditing" variant="outline-info"-->
+      <!--@click="enterEditMode(inputOptions.currencyType)">Edit-->
+      <!--</b-button>-->
+      <!--<b-button v-if="inputOptions.currencyType.isEditing" variant="outline-success"-->
+      <!--@click=-->
+      <!--"exitEditMode(inputOptions.currencyType);-->
+      <!--api_data.currency_type = values.currencyType;-->
+      <!--saveData();"-->
+      <!--:disabled="this.$v.values.currencyType.$error">Save-->
+      <!--</b-button>-->
+      <!--<b-button v-if="inputOptions.currencyType.isEditing" variant="outline-danger"-->
+      <!--@click="exitEditMode(inputOptions.currencyType);-->
+      <!--values.currencyType = api_data.currency_type;">X-->
+      <!--</b-button>-->
+      <!--</b-input-group-append>-->
 
-        <b-form-invalid-feedback>
-          <div v-if="!$v.values.currencyType.required">This field is required.</div>
-        </b-form-invalid-feedback>
-      </b-input-group>
+      <!--<b-form-invalid-feedback>-->
+      <!--<div v-if="!$v.values.currencyType.required">This field is required.</div>-->
+      <!--</b-form-invalid-feedback>-->
+      <!--</b-input-group>-->
 
-      <h4>Locations</h4>
-      <tutor-locations :idTutor="idTutor"></tutor-locations>
-
+      <div align="left" class="mt-5">
+        <h6>Available Locations:</h6>
+        <tutor-locations :idTutor="idTutor" class="mt-2 mb-3"></tutor-locations>
+      </div>
     </b-card>
   </div>
 </template>
@@ -270,6 +272,7 @@
       }
     },
     created() {
+      console.log("idTutor", this.idTutor)
       this.listData();
     },
     validations: {

@@ -3,14 +3,18 @@
 
     <b-navbar toggleable="lg" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <b-navbar-brand href="#">TutorHere</b-navbar-brand>
+        <router-link to="/">
+          <b-navbar-brand href="/">TutorHere</b-navbar-brand>
+        </router-link>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-item href="#">Subjects</b-nav-item>
-            <b-nav-item href="#">Tutors</b-nav-item>
+            <b-nav-item to="requests">Requests</b-nav-item>
+            <b-nav-item to="timeslots">Timeslots</b-nav-item>
+            <b-nav-item to="subjects">Subjects</b-nav-item>
+            <b-nav-item to="profile">Profile</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
@@ -28,9 +32,9 @@
               </b-dropdown-item>
             </b-nav-item-dropdown>
 
-            <b-nav-item-dropdown text="Userw" right>
+            <b-nav-item-dropdown text="User" right>
               <!--<router-link to="/dashboard_tutor/profile">-->
-              <b-dropdown-item @click="editProfile">Profile</b-dropdown-item>
+              <b-dropdown-item to="profile">Profile</b-dropdown-item>
               <b-dropdown-item @click="signout">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
 
@@ -56,7 +60,7 @@
         this.$router.push("/login");
       },
       editProfile() {
-        this.$router.push("/dashboard_tutor/profile ");
+        this.$router.push("/dashboard_tutor/profile");
       }
     }
   }

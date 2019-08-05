@@ -4,15 +4,14 @@
       <basic-navbar></basic-navbar>
       <div class="row">
         <!-- Content Column -->
-        <div class="col-lg-8">
+        <div v-bind:class="[showSideBar ? styles.colLg8 : styles.colLg12]">
           <router-view align="center"></router-view>
         </div>
-        <!--Sidebar Widgets Column-->
-        <!--<div class="col-md-4">-->
-        <!--<basic-sidebar></basic-sidebar>-->
-        <!--</div>-->
-      </div><!-- /.row -->
 
+        <div v-show="showSideBar" v-bind:class="styles.colLg4">
+          <basic-sidebar></basic-sidebar>
+        </div>
+      </div><!-- /.row -->
 
     </div><!-- /.container -->
     <basic-footer></basic-footer>
@@ -27,10 +26,42 @@
 
   export default {
     name: "DashboardTutor",
+    data() {
+      return {
+        idTutor: 1,
+        styles: {
+          colLg4: 'col-lg-4',
+          colLg8: 'col-lg-8',
+          colLg12: 'col-lg-12',
+        }
+      }
+    },
     components: {
       basicNavbar: Navbar,
       basicSidebar: Sidebar,
       basicFooter: Footer
+    },
+    created() {
+      // if (true) {
+      //   console.log(this.$route.path);
+      // }
+    },
+    created() {
+      this.idTutor = this.$auth.getId()
+    },
+
+    computed: {
+      showSideBar() {
+        console.log(this.$route.path);
+        if (this.$route.path != '/dashboard_tutor/requests') {
+          return true;
+          console.log("yass");
+        }
+        else {
+          console.log("nooooo");
+          return false;
+        }
+      }
     }
   }
 </script>

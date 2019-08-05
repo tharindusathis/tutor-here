@@ -8,6 +8,9 @@ Vue.use(VueRouter);
 import Login from './components/auth/LoginPage.vue'
 import RegisterTutor from './components/auth/RegisterTutor.vue'
 import RegisterLearner from './components/auth/RegisterLearner.vue'
+import RegisterComplete from './components/auth/RegisterSuccessful'
+
+import DashboardVisitor from './components/auth/DashboardVisitor'
 
 import DashboardTutor from './components/tutor/DashboardTutor.vue'
 import DashboardLearner from './components/learner/DashboardLearner.vue'
@@ -15,9 +18,11 @@ import DashboardLearner from './components/learner/DashboardLearner.vue'
 //tutor
 import TutorHome from './components/tutor/Home.vue'
 import CreateSubject from './components/tutor/subjects/Create.vue'
+import TutorSubjects from './components/tutor/subjects/List'
 import TutorProfile from './components/tutor/settings/TutorProfile.vue'
 import TutorTuition from './components/tutor/tuitions/Tuition'
 import TutorTimeslots from './components/tutor/timeslots/TutorTimeslots.vue'
+import TutorRequests from './components/tutor/tuitions/RequestsTable'
 
 //learner
 import LearnerHome from './components/learner/Home.vue'
@@ -63,7 +68,8 @@ const router = new VueRouter({
       redirect: "/dashboard_learner/home",
       component: DashboardLearner,
       meta: {
-        forAuth: true
+        forAuth: true,
+        forLearner: true
       },
       children: [
         {
@@ -74,14 +80,17 @@ const router = new VueRouter({
           path: "profile",
           name: "Edit Profile",
           component: LearnerProfile,
+          props: {idLearner: Vue.auth.getId()}
         }, {
           path: "find_tutors",
           name: "Find Tutors",
           component: FindTutors,
+          props: {idLearner: Vue.auth.getId()}
         }, {
           path: "requests",
           name: "Tuitions",
           component: LearnerRequests,
+          props: {idLearner: Vue.auth.getId()}
         }, {
           path: "tuition/:idRequest",
           name: "Tuition",
@@ -95,7 +104,8 @@ const router = new VueRouter({
       component: DashboardTutor,
       redirect: "/dashboard_tutor/home",
       meta: {
-        forAuth: true
+        forAuth: true,
+        forTutor: true
       },
       children: [
         {
@@ -108,6 +118,26 @@ const router = new VueRouter({
           component: TutorProfile,
           props: {idTutor: Vue.auth.getId()}
         }, {
+          path: "timeslots",
+          name: "Edit Timeslots",
+          component: TutorTimeslots,
+          props: {idTutor: Vue.auth.getId()}
+        }, {
+          path: "subjects",
+          name: "Subjects",
+          component: TutorSubjects,
+          props: {idTutor: Vue.auth.getId()}
+        }, {
+          path: "new_subject",
+          name: "New Subjects",
+          component: CreateSubject,
+          props: {idTutor: Vue.auth.getId()}
+        }, {
+          path: "requests",
+          name: "Tuitions",
+          component: TutorRequests,
+          props: {idTutor: Vue.auth.getId()}
+        }, {
           path: "tuition/:idRequest",
           name: "Tuition",
           component: TutorTuition,
@@ -116,29 +146,55 @@ const router = new VueRouter({
       ]
     },
     {
-      path: "/login",
-      name: "Login",
-      component: Login,
+      path: "/",
+      redirect: "/login",
       meta: {
         forVisitors: true
       }
     },
     {
-      path: "/register_tutor",
-      name: "RegisterTutor",
-      component: RegisterTutor,
+      path: "/v",
+      redirect: "/login",
+      component: DashboardVisitor,
       meta: {
         forVisitors: true
-      }
+      },
+      children: [
+        {
+          path: "/login",
+          name: "Login",
+          component: Login,
+          meta: {
+            forVisitors: true
+          }
+        },
+        {
+          path: "/register_tutor",
+          name: "RegisterTutor",
+          component: RegisterTutor,
+          meta: {
+            forVisitors: true
+          }
+        },
+        {
+          path: "/register_learner",
+          name: "RegisterLearner",
+          component: RegisterLearner,
+          meta: {
+            forVisitors: true
+          }
+        },
+        {
+          path: "/register_confirm",
+          name: "RegisterFinish",
+          component: RegisterComplete,
+          meta: {
+            forVisitors: true
+          }
+        }
+      ]
     },
-    {
-      path: "/register_learner",
-      name: "RegisterLearner",
-      component: RegisterLearner,
-      meta: {
-        forVisitors: true
-      }
-    },
+
   ]
 })
 

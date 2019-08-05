@@ -5,7 +5,7 @@
       <b-row class="justify-content-center">
         <b-col md="8">
           <b-card-group>
-            <b-card no-body class="p-4">
+            <b-card no-body class="p-4 bg-seco">
               <b-card-body>
 
                 <b-form @submit="onSubmit">
@@ -13,7 +13,9 @@
                   <p class="text-muted">Sign In to your account</p>
                   <b-input-group class="mb-3">
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="icon-user"></i></b-input-group-text>
+                      <b-input-group-text>
+                        <font-awesome-icon icon="user"/>
+                      </b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input
                         v-model="form.email"
@@ -25,7 +27,9 @@
                   </b-input-group>
                   <b-input-group class="mb-4">
                     <b-input-group-prepend>
-                      <b-input-group-text><i class="icon-lock"></i></b-input-group-text>
+                      <b-input-group-text>
+                        <font-awesome-icon icon="lock"/>
+                      </b-input-group-text>
                     </b-input-group-prepend>
                     <b-form-input
                         type="password"
@@ -40,21 +44,25 @@
                       <b-button type="submit" variant="success" class="px-4">Login</b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="link" class="px-0">Forgot password?</b-button>
+                      <!--<b-button variant="link" class="px-0">Forgot password?</b-button>-->
                     </b-col>
                   </b-row>
                 </b-form>
 
               </b-card-body>
             </b-card>
-            <b-card no-body class="text-white bg-success py-5 d-md-down-none" style="width:44%">
+            <b-card no-body class="text-white bg-primary   py-5 d-md-down-none" style="width:44%">
               <b-card-body class="text-center">
                 <div>
                   <h2>Sign up</h2>
                   <p>“Better than a thousand days of diligent study is one day with a great teacher.”</p>
-                  <b-button variant="primary" class="active mt-3">Start Learning!</b-button>
+                  <router-link to="/register_learner">
+                    <b-button variant="primary" class="active mt-3">Start Learning!</b-button>
+                  </router-link>
                   <br>
-                  <b-button variant="primary" class="active mt-3">Start Teaching!</b-button>
+                  <router-link to="/register_tutor">
+                    <b-button variant="primary" class="active mt-3">Start Teaching!</b-button>
+                  </router-link>
                 </div>
               </b-card-body>
             </b-card>
@@ -62,6 +70,7 @@
         </b-col>
       </b-row>
     </div>
+
   </div>
 
 </template>
@@ -72,8 +81,8 @@
     data() {
       return {
         form: {
-          email: 'emma@up.lk',
-          password: 'password',
+          email: '',
+          password: '',
         },
       }
     }
@@ -99,7 +108,14 @@
               this.$router.push("/dashboard_tutor");
             else if (response.body.type == 2)
               this.$router.push("/dashboard_learner");
-          })
+          }).catch(error => {
+          this.$loading(false);
+          this.showError('Error in logging details. Please try again.')
+          console.log("err");
+          console.log(error);
+          console.log(error.data);
+
+        });
       }
       ,
       onReset(evt) {
@@ -108,6 +124,22 @@
         this.form.email = ''
         this.form.password = ''
         this.form.food = null
+      },
+
+      showError(error) {
+        this.$bvModal.msgBoxOk(error, {
+          title: 'Error',
+          size: 'sm',
+          okVariant: 'danger',
+          headerBorderVariant: 'danger',
+          bodyBorderVariant: 'danger',
+          headerBgVariant: 'danger'
+        })
+          .then(value => {
+          })
+          .catch(err => {
+            // An error occurred
+          })
       }
     }
   }

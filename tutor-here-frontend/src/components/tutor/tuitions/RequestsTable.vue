@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-col sm="12">
-      <b-card>
+      <b-card v-show="items.length > 0">
         <b-container fluid>
 
           <!-- User Interface controls -->
@@ -153,7 +153,15 @@
 
         </b-container>
       </b-card>
+      <b-card v-if="items.length == 0 || items == null" class="align-items-center d-flex justify-content-center">
+        <div class="m-5">
+          <h4>
+            <b-badge variant="dark">EMPTY LIST</b-badge>
+          </h4>
+          <h6>You do not have any tuition requests or tuition history.</h6>
+        </div>
 
+      </b-card>
     </b-col>
   </b-row>
 </template>
@@ -164,7 +172,7 @@
   export default {
     name: "RequestsTable",
     props: {
-      idLearner: {
+      idTutor: {
         default: 1,
         type: Number
       }
@@ -179,10 +187,9 @@
           {key: 'date', label: 'Date', sortable: true},
           {key: 'start_time', label: 'From', sortable: true},
           {key: 'end_time', label: 'To', sortable: true},
-          {key: 'learner_name', label: 'Learner Name', sortable: true},
           {key: 'subject_name', label: 'Subject', sortable: true},
-          {key: 'syllabus', label: 'Level ', sortable: true},
-          {key: 'address', label: 'Location', sortable: true},
+          {key: 'grade', label: 'Level', sortable: true},
+          {key: 'dist', label: 'KM', sortable: true},
           {key: 'actions', label: 'Actions'},
         ],
         currentPage: 1,
@@ -216,7 +223,7 @@
     methods: {
       loadContent() {
         this.isBusy = true;
-        this.$http.get('tutors/' + this.idLearner + '/requests')
+        this.$http.get('tutors/' + this.idTutor + '/requests')
           .then(response => {
             console.log(response);
 

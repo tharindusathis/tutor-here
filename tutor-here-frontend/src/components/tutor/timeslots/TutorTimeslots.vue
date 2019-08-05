@@ -1,20 +1,23 @@
 <template>
   <div>
-    <b-card>
-          <h4>Onetime Timeslots</h4>
-          <tutor-timeslots-single :idTutor='idTutor'></tutor-timeslots-single>
+
+    <b-card align="left" class="mt-3">
+      <h6>One-time Timeslots</h6>
+      <tutor-timeslots-single :idTutor='idTutor'></tutor-timeslots-single>
+
     </b-card>
-    <b-card>
-          <h4>Repeating Timeslots</h4>
-          <tutor-timeslots-weekly :idTutor='idTutor'></tutor-timeslots-weekly>
+
+    <b-card align="left" class="mt-4">
+      <h6>Weekly Repeating Timeslots</h6>
+      <tutor-timeslots-weekly :idTutor='idTutor' class="mt-2 mb-2"></tutor-timeslots-weekly>
     </b-card>
   </div>
 </template>
 
 <script>
-  
-import TutorTimeslotsWeekly from './TutorTimeslotsWeekly.vue'
-import TutorTimeslotsSingle from './TutorTimeslotsSingle.vue'
+
+  import TutorTimeslotsWeekly from './TutorTimeslotsWeekly.vue'
+  import TutorTimeslotsSingle from './TutorTimeslotsSingle.vue'
 
 
   export default {
@@ -24,7 +27,7 @@ import TutorTimeslotsSingle from './TutorTimeslotsSingle.vue'
       TutorTimeslotsSingle
     },
     props: {
-       idTutor: {
+      idTutor: {
         default: 1
       }
     },

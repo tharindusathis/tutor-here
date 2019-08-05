@@ -11,62 +11,64 @@
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>
-                      <i class="icon-user"></i>
+                      <font-awesome-icon icon="user"/>
                     </b-input-group-text>
                   </b-input-group-prepend>
                   <b-form-input
-                    type="text"
-                    class="form-control"
-                    placeholder="First Name"
-                    autocomplete="text"
-                    required
-                    v-model="form.fname"
+                      type="text"
+                      class="form-control"
+                      placeholder="First Name"
+                      autocomplete="text"
+                      required
+                      v-model="form.fname"
                   />
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>
-                      <i class="icon-user"></i>
+                      <font-awesome-icon icon="user"/>
                     </b-input-group-text>
                   </b-input-group-prepend>
                   <b-form-input
-                    type="text"
-                    class="form-control"
-                    placeholder="Last Name"
-                    autocomplete="text"
-                    required
-                    v-model="form.lname"
-                  />
-                </b-input-group>
-
-                <b-input-group class="mb-3">
-                  <b-input-group-prepend>
-                    <b-input-group-text>@</b-input-group-text>
-                  </b-input-group-prepend>
-                  <b-form-input
-                    type="email"
-                    class="form-control"
-                    placeholder="Email"
-                    autocomplete="email"
-                    required
-                    v-model="form.email"
+                      type="text"
+                      class="form-control"
+                      placeholder="Last Name"
+                      autocomplete="text"
+                      required
+                      v-model="form.lname"
                   />
                 </b-input-group>
 
                 <b-input-group class="mb-3">
                   <b-input-group-prepend>
                     <b-input-group-text>
-                      <i class="icon-lock"></i>
+                      <font-awesome-icon icon="at"/>
                     </b-input-group-text>
                   </b-input-group-prepend>
                   <b-form-input
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                    autocomplete="new-password"
-                    required
-                    v-model="form.password"
+                      type="email"
+                      class="form-control"
+                      placeholder="Email"
+                      autocomplete="email"
+                      required
+                      v-model="form.email"
+                  />
+                </b-input-group>
+
+                <b-input-group class="mb-3">
+                  <b-input-group-prepend>
+                    <b-input-group-text>
+                      <font-awesome-icon icon="lock"/>
+                    </b-input-group-text>
+                  </b-input-group-prepend>
+                  <b-form-input
+                      type="password"
+                      class="form-control"
+                      placeholder="Password"
+                      autocomplete="new-password"
+                      required
+                      v-model="form.password"
                   />
                 </b-input-group>
 
@@ -99,71 +101,91 @@
 </template>
 
 <script>
-export default {
-  name: "RegisterTutor",
-  data() {
-    return {
-      form: {
-        type: "2",
-        email: "tharindu.sathis@gmail.com",
-        password_confirmation: "",
-        password: "password",
-        fname: "a",
-        lname: "b"
-      },
-      error: null
-    };
-  },
-  methods: {
-    onSubmit(evt) {
-      evt.preventDefault();
-      this.form.password_confirmation = this.form.password;
-      this.$http
-        .post("auth/signup", this.form, {
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest"
-          }
-        })
-        .then(response => {
-          console.log("res");
-          console.log(response);
-          this.$router.push("/login");
-        })
-        .catch(error => {
-          console.log("err");
-          console.log(error);
-          console.log(error.data);
-          if (error) {
-            /*
-             * The request was made and the server responded with a
-             * status code that falls out of the range of 2xx
-             */
-            console.log(error.body);
-            console.log(error.status);
-            console.log(error.headers);
-          } else if (error.request) {
-            /*
-             * The request was made but no response was received, `error.request`
-             * is an instance of XMLHttpRequest in the browser and an instance
-             * of http.ClientRequest in Node.js
-             */
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request and triggered an Error
-            console.log("Error", error.message);
-          }
-          console.log(error.config);
-        });
+  export default {
+    name: "RegisterTutor",
+    data() {
+      return {
+        form: {
+          type: "2",
+          email: "",
+          password_confirmation: "",
+          password: "",
+          fname: "",
+          lname: ""
+        },
+        error: null
+      };
     },
-    onReset(evt) {
-      evt.preventDefault();
-      // Reset our form values
-      this.form.email = "";
-      this.form.password = "";
-      this.form.fname = "";
-      this.form.lname = "";
+    methods: {
+      onSubmit(evt) {
+        evt.preventDefault();
+        this.form.password_confirmation = this.form.password;
+
+        this.$loading(true);
+        this.$http
+          .post("auth/signup", this.form, {
+            headers: {
+              "Content-Type": "application/json",
+              "X-Requested-With": "XMLHttpRequest"
+            }
+          })
+          .then(response => {
+            console.log("res");
+            console.log(response);
+            this.$loading(false);
+            this.$router.push("/register_confirm");
+          })
+          .catch(error => {
+            console.log("err");
+            console.log(error);
+            console.log(error.data);
+            this.$loading(false);
+            this.showError('Error siging-up. Please try again.');
+            // if (error) {
+            //   /*
+            //    * The request was made and the server responded with a
+            //    * status code that falls out of the range of 2xx
+            //    */
+            //   console.log(error.body);
+            //   console.log(error.status);
+            //   console.log(error.headers);
+            // } else if (error.request) {
+            //   /*
+            //    * The request was made but no response was received, `error.request`
+            //    * is an instance of XMLHttpRequest in the browser and an instance
+            //    * of http.ClientRequest in Node.js
+            //    */
+            //   console.log(error.request);
+            // } else {
+            //   // Something happened in setting up the request and triggered an Error
+            //   console.log("Error", error.message);
+            // }
+            // console.log(error.config);
+          });
+      },
+      onReset(evt) {
+        evt.preventDefault();
+        // Reset our form values
+        this.form.email = "";
+        this.form.password = "";
+        this.form.fname = "";
+        this.form.lname = "";
+      },
+      showError(error) {
+        this.$bvModal.msgBoxOk(error, {
+          title: 'Error',
+          size: 'sm',
+          okVariant: 'danger',
+          headerBorderVariant: 'danger',
+          bodyBorderVariant: 'danger',
+          headerBgVariant: 'danger'
+        })
+          .then(value => {
+          })
+          .catch(err => {
+            // An error occurred
+          })
+      }
     }
-  }
-};
+  };
 </script>

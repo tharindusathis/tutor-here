@@ -13,6 +13,18 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueLoading from 'vuejs-loading-plugin'
 
+
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {faUser, faLock, faAt} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+import StarRating from 'vue-star-rating'
+
+library.add(faUser, faLock, faAt)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+Vue.component('star-rating', StarRating);
+
 // using default options
 Vue.use(VueLoading)
 // overwrite defaults
@@ -24,13 +36,14 @@ Vue.use(VueLoading)
 //   background: 'rgb(255,255,255)', // set custom background
 //   classes: ['myclass'] // array, object or string
 // })
-//
+
 
 Vue.component('VueSlider', VueSlider)
 Vue.use(Auth)
 
 Vue.use(VueGoogleMaps, {
   load: {
+    // key: "AIzaSyBnyQVq-k9hIIXGUlAHggymb0k1Mi_q37E",
     key: "AIzaSyCQjKoJ2wT5Crcy3oPnJN3wAbYojDSxJgM",
     libraries: "places" // necessary for places input
   }
@@ -55,9 +68,13 @@ Vue.prototype.$USER_TYPE_LEARNER = 2
 Router.beforeEach(
   (to, from, next) => {
     if (to.matched.some(record => record.meta.forVisitors)) {
-      if (Vue.auth.isAuthenticated()) {
+      if (Vue.auth.isAuthenticated() && Vue.auth.getType() == 2) {
         next({
-          path: '/dashboard'
+          path: '/dashboard_learner'
+        })
+      } else if (Vue.auth.isAuthenticated() && Vue.auth.getType() == 1) {
+        next({
+          path: '/dashboard_tutor'
         })
       } else next()
     } else if (to.matched.some(record => record.meta.forAuth)) {
@@ -68,7 +85,8 @@ Router.beforeEach(
       } else next()
     } else next()
 
-  }
+  },
+  console.log("id: " + Vue.auth.getId())
 )
 
 

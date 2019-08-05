@@ -29,11 +29,11 @@
           @hidden="resetModal"
           @ok="handleOk"
           ok-title="Add Location"
-          class="pac-container"
       >
         <div>
           <b-form-group id="location-in" :description="new_location.address">
-            <gmap-autocomplete class="form-control" style="width: 100%" @place_changed="setPlace"
+            <gmap-autocomplete class="form-control" style="width: 100%;"
+                               @place_changed="setPlace"
                                placeholder="Enter the location here">
             </gmap-autocomplete>
           </b-form-group>
@@ -63,7 +63,7 @@
     name: 'LearnerLocations',
     props: {
       idLearner: {
-        default: 1,
+        default: 14,
         type: Number
       }
     },
@@ -262,12 +262,17 @@
     },
     methods: {
       listLocations() {
+        this.$loading(true);
         this.$http.get('learners/' + this.idLearner + '/locations')
           .then(response => {
             console.log(response.data);
             this.api_data_locations = response.data;
+            this.$loading(false);
             console.log("ddd");
             console.log(this.api_data_locations);
+          }, error => {
+            console.log(error);
+            this.$loading(false);
           });
       },
       resetModal() {
@@ -275,12 +280,15 @@
       },
       handleOk(bvModalEvt) {
         //let town =  this.api_location_info[0].address_components[1].long_name;
+        this.$loading(true);
         this.$http.post('learnerlocations', this.new_location)
           .then(response => {
             console.log(response);
+            this.$loading(false);
             this.listLocations();
           }, error => {
             console.log(error);
+            this.$loading(false);
           });
       },
       getLocationInfo(url) {
@@ -298,9 +306,11 @@
 
       },
       deleteLocation(id) {
+        this.$loading(true);
         this.$http.delete('learnerlocations/' + id)
           .then(response => {
             this.api_location_info = response.data;
+            this.$loading(false);
             console.log(response.data);
             this.listLocations();
           });
@@ -323,8 +333,10 @@
         this.places.push(this.currentPlace);
         this.center = marker;
         this.currentPlace = null;
+        // this.url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.center.lat + ',' +
+        //   this.center.lng + '&key=AIzaSyCQjKoJ2wT5Crcy3oPnJN3wAbYojDSxJgM';
         this.url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.center.lat + ',' +
-          this.center.lng + '&key=AIzaSyCQjKoJ2wT5Crcy3oPnJN3wAbYojDSxJgM';
+          this.center.lng + '&key=AIzaSyBnyQVq-k9hIIXGUlAHggymb0k1Mi_q37E';
         this.getLocationInfo(this.url);
 
       },
@@ -338,8 +350,10 @@
           this.places.push(this.currentPlace);
           this.center = marker;
           this.currentPlace = null;
+          // this.url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.center.lat + ',' +
+          //   this.center.lng + '&key=AIzaSyCQjKoJ2wT5Crcy3oPnJN3wAbYojDSxJgM';  //'&result_type=locality'
           this.url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.center.lat + ',' +
-            this.center.lng + '&key=AIzaSyCQjKoJ2wT5Crcy3oPnJN3wAbYojDSxJgM';  //'&result_type=locality'
+            this.center.lng + '&key=AIzaSyBnyQVq-k9hIIXGUlAHggymb0k1Mi_q37E';  //'&result_type=locality'
           this.getLocationInfo(this.url);
         }
       },
@@ -359,20 +373,8 @@
   }
 </script>
 
-<style scoped>
+<style>
   .pac-container {
-    background-color: #FFF;
-    z-index: 20;
-    position: fixed;
-    display: inline-block;
-    float: left;
-  }
-
-  .modal {
-    z-index: 20;
-  }
-
-  .modal-backdrop {
-    z-index: 10;
+    z-index: 1051;
   }
 </style>
