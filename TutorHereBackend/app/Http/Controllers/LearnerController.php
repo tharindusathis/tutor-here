@@ -39,6 +39,42 @@ class LearnerController extends Controller
         return $subs;
     }
 
+    public function requests($id){
+        $requests =  DB::select('
+         SELECT
+            learnerlocation.address,
+            request.payment,
+            request.created_at,
+            `subject`.`name`,
+            `subject`.grade,
+            `subject`.syllabus_from,
+            CONCAT( tutor.fname, " ", tutor.lname ) AS tutor_name,
+            CONCAT( `subject`.`grade`, ", ", `subject`.syllabus_from ) AS syllabus,
+            tutor.fname,
+            tutor.mobile,
+            tutor.email,
+            request.date,
+            request.start_time,
+            `subject`.`name` AS subject_name,
+            request.end_time,
+            request.dist,
+            request.idRequest,
+            request.`status`
+        FROM
+            request
+            INNER JOIN tutor_has_subject ON request.Tutor_has_Subject_Tutor_idTutor = tutor_has_subject.Tutor_idTutor
+            AND request.Tutor_has_Subject_Subject_idSubject = tutor_has_subject.Subject_idSubject
+            INNER JOIN `subject` ON tutor_has_subject.Subject_idSubject = `subject`.idSubject
+            INNER JOIN tutor ON tutor_has_subject.Tutor_idTutor = tutor.idTutor
+            INNER JOIN learnerlocation ON request.LearnerLocation_idLearnerLocation = learnerlocation.idLearnerLocation
+        WHERE
+            request.Learner_idLearner = ?
+        ',
+                [$id]
+        );
+        return response()->json($requests);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

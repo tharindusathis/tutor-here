@@ -11,11 +11,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Review
- * 
+ *
  * @property int $Tuition_Request_idRequest
  * @property int $rating
  * @property string $text
- * 
+ *
  * @property \App\Models\Tuition $tuition
  *
  * @package App\Models
@@ -34,7 +34,8 @@ class Review extends Eloquent
 
 	protected $fillable = [
 		'rating',
-		'text'
+		'text',
+		'Tuition_Request_idRequest'
 	];
 
 	public function tuition()

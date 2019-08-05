@@ -57,7 +57,6 @@ class Tutor extends Eloquent
 		'lname',
 		'email',
 		'mobile',
-		'password',
 		'account_balance',
 		'currency_type'
 	];

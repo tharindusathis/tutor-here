@@ -32,6 +32,7 @@ Route::get('learnerlocations/{id}',	'LearnerlocationController@show');
 Route::get('payments/{id}',			'PaymentController@show');
 Route::get('qualifications/{id}',	'QualificationController@show');
 Route::get('requests/{id}',			'RequestController@show');
+Route::get('request/{id}',			'RequestController@showOne');
 Route::get('reviews/{id}',			'ReviewController@show');
 Route::get('singletimeslots/{id}',	'SingletimeslotController@show');
 Route::get('subjects/{id}',			'SubjectController@show');
@@ -80,13 +81,15 @@ Route::delete('tutorlocations/{id}',	'TutorlocationController@delete');
 Route::delete('weeklytimeslots/{id}',	'WeeklytimeslotController@delete');
 
 //subjects
-Route::get('subjects_dist',
-			'SubjectController@distinct');
+Route::get('subjects_dist', 'SubjectController@distinct');
 
 Route::get('tutors/{id}/subjects',			'TutorController@subjects');
 Route::get('tutors/{id}/locations',			'TutorController@locations');
 Route::get('tutors/{id}/singletimeslots',			'TutorController@singletimeslots');
 Route::get('tutors/{id}/weeklytimeslots',			'TutorController@weeklytimeslots');
+Route::get('tutors/{id}/requests',			'TutorController@requests');
+Route::get('learners/{id}/requests',			'LearnerController@requests');
+Route::get('tutors/{id}/requests/old',			'TutorController@requestsOld');
 Route::get('learners/{id}/locations',			'LearnerController@locations');
 
 Route::post('tutors/search', 'TutorController@findTutorsWithGrade');
@@ -95,6 +98,14 @@ Route::post('subjects/search/grades', 'SubjectController@findGrades');
 
 Route::get('subjects/search/subjects', 'SubjectController@findSubjects');
 Route::get('mail', 'SubjectController@mail');
+
+
+Route::get('request/accept/{id}', 'RequestController@acceptRequest');
+Route::get('request/decline/{id}', 'RequestController@declineRequest');
+Route::get('request/coming/{id}', 'RequestController@comingRequest');
+Route::get('request/start/{id}', 'RequestController@startRequest');
+Route::get('request/finish/{id}', 'RequestController@finishRequest');
+Route::get('request/delete/{id}', 'RequestController@deleteRequest');
 
 
 

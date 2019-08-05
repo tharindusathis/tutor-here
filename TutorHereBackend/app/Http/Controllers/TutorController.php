@@ -15,7 +15,6 @@ class TutorController extends Controller
      */
     public function index()
     {
-
         return Tutor::all();
     }
 
@@ -140,7 +139,7 @@ class TutorController extends Controller
                     SELECT * FROM tutor_has_subject WHERE tutor_has_subject.Subject_idSubject IN
                     (	SELECT idSubject FROM `subject`
                         WHERE UPPER(`name`) = UPPER( ? )
-                        AND UPPER(`grade`) = UPPER( ? )
+                        AND UPPER(`grade`) =     UPPER( ? )
                         AND UPPER(`syllabus_from`) = UPPER( ? )
                     )
                 ) As t_s ON t_s.Tutor_idTutor = tutor.idTutor 	ORDER BY
@@ -208,6 +207,84 @@ class TutorController extends Controller
                 tutor_has_subject.Tutor_idTutor =' . $id
         );
         return $subs;
+    }
+
+
+    public function requests($id){
+        $requests =  DB::select('
+         SELECT
+            request.idRequest,
+            request.`status`,
+            request.Tutor_has_Subject_Tutor_idTutor,
+            request.Learner_idLearner AS idLearner,
+            request.payment,
+            request.date,
+            request.dist,
+            request.start_time,
+            request.end_time,
+            CONCAT(learner.fname," ",learner.lname) AS learner_name,
+            learner.mobile,
+            learnerlocation.address,
+            learnerlocation.tag,
+            learnerlocation.district,
+            learnerlocation.lat,
+            learnerlocation.lng,
+            `subject`.`name` AS subject_name,
+            `subject`.grade,
+            `subject`.syllabus_from,
+            request.created_at,
+            learner.email
+            FROM
+            request
+            INNER JOIN learnerlocation ON request.LearnerLocation_idLearnerLocation = learnerlocation.idLearnerLocation
+            INNER JOIN learner ON request.Learner_idLearner = learner.idLearner AND learnerlocation.Learner_idLearner = learner.idLearner
+            INNER JOIN tutor_has_subject ON request.Tutor_has_Subject_Tutor_idTutor = tutor_has_subject.Tutor_idTutor AND request.Tutor_has_Subject_Subject_idSubject = tutor_has_subject.Subject_idSubject
+            INNER JOIN `subject` ON tutor_has_subject.Subject_idSubject = `subject`.idSubject
+            WHERE Tutor_has_Subject_Tutor_idTutor = ? AND  request.`status` IN (0,1)
+            ORDER BY
+            request.created_at ASC
+        ',
+                [$id]
+        );
+        return response()->json(['all' => $requests]);
+    }
+
+    public function requestsOld($id){
+        $requests =  DB::select('
+         SELECT
+            request.idRequest,
+            request.`status`,
+            request.Tutor_has_Subject_Tutor_idTutor,
+            request.Learner_idLearner AS idLearner,
+            request.payment,
+            request.date,
+            request.start_time,
+            request.end_time,
+            CONCAT(learner.fname," ",learner.lname) AS learner_name,
+            learner.mobile,
+            learnerlocation.address,
+            learnerlocation.tag,
+            learnerlocation.district,
+            learnerlocation.lat,
+            learnerlocation.lng,
+            `subject`.`name` AS subject_name,
+            `subject`.grade,
+            `subject`.syllabus_from,
+            request.created_at,
+            learner.email
+            FROM
+            request
+            INNER JOIN learnerlocation ON request.LearnerLocation_idLearnerLocation = learnerlocation.idLearnerLocation
+            INNER JOIN learner ON request.Learner_idLearner = learner.idLearner AND learnerlocation.Learner_idLearner = learner.idLearner
+            INNER JOIN tutor_has_subject ON request.Tutor_has_Subject_Tutor_idTutor = tutor_has_subject.Tutor_idTutor AND request.Tutor_has_Subject_Subject_idSubject = tutor_has_subject.Subject_idSubject
+            INNER JOIN `subject` ON tutor_has_subject.Subject_idSubject = `subject`.idSubject
+            WHERE Tutor_has_Subject_Tutor_idTutor = ? AND  request.`status` IN (2,3)
+            ORDER BY
+            request.created_at ASC
+        ',
+                [$id]
+        );
+        return response()->json(['all' => $requests]);
     }
 
     /**

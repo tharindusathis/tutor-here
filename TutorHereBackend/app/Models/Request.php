@@ -33,6 +33,8 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 class Request extends Eloquent
 {
 	protected $table = 'request';
+
+	protected $primaryKey = 'idRequest';
 	public $timestamps = true;
 
 	protected $casts = [
@@ -42,6 +44,7 @@ class Request extends Eloquent
 		'Learner_idLearner' => 'int',
 		'LearnerLocation_idLearnerLocation' => 'int',
 		'payment' => 'float',
+		'dist' => 'float',
 		'duration' => 'int'
 	];
 
@@ -60,7 +63,8 @@ class Request extends Eloquent
 		'Tutor_has_Subject_Tutor_idTutor',
 		'Tutor_has_Subject_Subject_idSubject',
 		'Learner_idLearner',
-		'LearnerLocation_idLearnerLocation'
+		'LearnerLocation_idLearnerLocation',
+		'dist'
 	];
 
 	public function learner()

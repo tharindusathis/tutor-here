@@ -11,12 +11,12 @@ use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Tuition
- * 
+ *
  * @property int $Request_idRequest
  * @property int $status
  * @property int $duration
  * @property \Carbon\Carbon $created_at
- * 
+ *
  * @property \App\Models\Request $request
  * @property \Illuminate\Database\Eloquent\Collection $payments
  * @property \App\Models\Review $review
@@ -28,7 +28,7 @@ class Tuition extends Eloquent
 	protected $table = 'tuition';
 	protected $primaryKey = 'Request_idRequest';
 	public $incrementing = false;
-	public $timestamps = false;
+	public $timestamps = true;
 
 	protected $casts = [
 		'Request_idRequest' => 'int',
@@ -38,7 +38,8 @@ class Tuition extends Eloquent
 
 	protected $fillable = [
 		'status',
-		'duration'
+		'duration',
+		'Request_idRequest'
 	];
 
 	public function request()
